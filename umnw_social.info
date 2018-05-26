@@ -1,0 +1,6 @@
+name = UMNW Social Block
+description = UMNW Social Block
+package = Un moscerino nel web
+core = 7.x
+
+dependencies[] = umnw_helpers

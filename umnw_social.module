@@ -1,0 +1,113 @@
+<?php
+/**
+* Implements hook_block_info().
+*/
+function umnw_social_block_info() {
+  $blocks = array();
+  $blocks['umnw_social_block'] = array(
+    'info' => t('UMNW Social block'),
+  );
+  return $blocks;
+}
+/**
+* Implements hook_block_view().
+*/
+function umnw_social_block_view($delta = '') {
+  $block = array();
+  switch ($delta) {
+    case 'umnw_social_block':
+      $block['subject'] = '';
+      $block['content'] = _umnw_social_content();
+      break;
+  }
+  return $block;
+}
+function _umnw_social_content() {
+  $socials = _umnw_social_get_socials();
+  $output = theme('umnw_social_tpl',array('socials'=>$socials));
+  return $output;
+}
+/**
+ * HOOK THEME
+ */
+function umnw_social_theme($existing, $type, $theme, $path){
+  return array(
+    'umnw_social_tpl' => array(
+      'template' => 'tpl/umnw-social-block',
+      'variables' => array('socials'=> NULL)
+    ),
+    'umnw_social_share_tpl' => array(
+      'template' => 'tpl/umnw-social-share',
+      'variables' => array('socials'=> NULL)
+    ),
+  );
+}
+/**
+ * Return social items in an array for block
+ */
+function _umnw_social_get_socials(){
+  $socials = array(
+//    'google-plus' => array(
+//      'fontawesome'=>'fa-google-plus-square',
+//      'url' => 'https://plus.google.com/u/0/b/102386215617077658272/102386215617077658272/posts'
+//      ),
+    'facebook' => array(
+      'fontawesome'=>'fa-facebook-square',
+      'url' => 'https://www.facebook.com/Agenziadiservizieconsulenza'
+      ), 
+    'linkedin' => array(
+      'fontawesome'=>'fa-linkedin',
+      'url' => '#'
+      ), 
+//    'youtube' => array(
+//      'fontawesome'=>'fa-youtube',
+//      'url' => 'https://www.youtube.com/channel/UCDyHvcGiNq35Upi3zHdCrXg'
+//      ),
+//    'skype' => array(
+//      'fontawesome'=>'fa-skype',
+//      'url' => 'skype:info@arpaservice.com?call'
+//      ),
+  );
+  return $socials;
+}
+/**
+ * Return social items in an array for share
+ */
+function _umnw_social_share_get_socials(){
+  global $base_url;
+  $link = $base_url.'/'.drupal_get_path_alias();
+  $link = urlencode($link);
+  $imageUrl = _umnw_helpers_get_current_image_path();
+  $imageUrl = urlencode($imageUrl);
+  
+  $socials = array(
+    'facebook' => array(
+      'fontawesome'=>'fa-facebook-square',
+      'url' => 'https://www.facebook.com/mosaicopiu',
+      'share-link' => 'https://www.facebook.com/sharer/sharer.php?u='.$link,
+      'image-url' =>  $imageUrl,
+      ), 
+    'pinterest' => array(
+      'fontawesome'=>'fa-pinterest',
+      'url' => 'http://pinterest.com',
+      'share-link' => 'https://pinterest.com/pin/create/button/?url='.$link.'&media='.$imageUrl,
+      'image-url' =>  $imageUrl,
+      ), 
+    'google-plus' => array(
+      'fontawesome'=>'fa-google-plus-square',
+      'url' => 'https://plus.google.com/u/0/111440724448792139260',
+      'share-link' => 'https://plus.google.com/share?url='.$link,
+      'image-url' =>  $imageUrl,
+      ), 
+  );
+  return $socials;
+}
+/**
+ * GET SOCIAL SHARE LINKS
+ */
+function _umnw_social_share_content() {
+  $socials = _umnw_social_share_get_socials();
+  $output = theme('umnw_social_share_tpl',array('socials'=>$socials));
+  return $output;
+}
+
